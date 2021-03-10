@@ -37,7 +37,7 @@ import java.util.Optional;
 @Singleton
 public class JsonMonitoringSystem implements MonitoringSystem {
 
-  public static final String TYPE = "json";
+  public static final String NAME = "json";
 
   private final SimpleMeterRegistry registry = new SimpleMeterRegistry();
 
@@ -47,8 +47,8 @@ public class JsonMonitoringSystem implements MonitoringSystem {
   }
 
   @Override
-  public String getType() {
-    return TYPE;
+  public String getName() {
+    return NAME;
   }
 
   @Override

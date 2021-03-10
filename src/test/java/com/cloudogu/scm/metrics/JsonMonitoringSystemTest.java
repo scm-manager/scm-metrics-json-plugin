@@ -34,9 +34,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 class JsonMonitoringSystemTest {
 
   @Test
-  void shouldReturnType() {
+  void shouldReturnName() {
     JsonMonitoringSystem system = new JsonMonitoringSystem();
-    assertThat(system.getType()).isEqualTo(JsonMonitoringSystem.TYPE);
+    assertThat(system.getName()).isEqualTo(JsonMonitoringSystem.NAME);
   }
 
   @Test

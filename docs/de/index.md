@@ -9,6 +9,6 @@ In SCM-Manager sammeln viele Komponenten Metriken, die nützliche Informationen 
 
 # Nutzung
 
-Die URL zu diesem Endpunkt kann über den Index (`/api/v2`) der jeweiligen SCM-Manager Instanz erfragt werden. Der Link befindet sind unter `_links.metrics` mit dem Namen `json`.
+Die URL zu diesem Endpunkt kann über den Index (`/api/v2`) der jeweiligen SCM-Manager Instanz erfragt werden. Der Link befindet sich unter `_links.metrics` mit dem Namen `json`.
 
-Um den Endpunkt abzufragen wird eine gültige Authentifizierung benötigt. Wenn der Endpunkt in ein externes System eingebunden werden soll, empfiehlt es sich für die Authentifizierung einen technischen Account in SCM-Manager anzulegen.
+Um den Endpunkt abzufragen, wird eine gültige Authentifizierung benötigt. Wenn der Endpunkt in ein externes System eingebunden werden soll, empfiehlt es sich für die Authentifizierung einen technischen Account in SCM-Manager anzulegen.

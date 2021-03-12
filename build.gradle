@@ -31,7 +31,7 @@ dependencies {
 }
 
 scmPlugin {
-  scmVersion = "2.14.2-SNAPSHOT"
+  scmVersion = "2.15.0"
   displayName = "Json Metrics"
   description = "Provides SCM-Manager metrics as json"
   author = "Cloudogu GmbH"

@@ -29,6 +29,8 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import io.micrometer.core.instrument.Measurement;
 import io.micrometer.core.instrument.Meter;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -60,16 +62,33 @@ public class JsonScrapeTarget implements ScrapeTarget {
   public void write(OutputStream outputStream) throws IOException {
     try (JsonGenerator generator = jsonFactory.createGenerator(outputStream, JsonEncoding.UTF8)) {
       generator.writeStartObject();
-      for (Meter meter : registry.getMeters()) {
-        write(generator, meter);
+      Multimap<String, Meter> meters = collectMeters();
+      for (String key : meters.keys()) {
+        write(generator, key, meters.get(key));
       }
       generator.writeEndObject();
     }
   }
 
-  private void write(JsonGenerator generator, Meter meter) throws IOException {
+  private Multimap<String, Meter> collectMeters() {
+    Multimap<String, Meter> meters = HashMultimap.create();
+    for (Meter meter : registry.getMeters()) {
+      meters.put(meter.getId().getName(), meter);
+    }
+    return meters;
+  }
+
+  private void write(JsonGenerator generator, String key, Iterable<Meter> meters) throws IOException {
+    generator.writeArrayFieldStart(key);
+    for (Meter meter : meters) {
+      writeMeter(generator, meter);
+    }
+    generator.writeEndArray();
+  }
+
+  private void writeMeter(JsonGenerator generator, Meter meter) throws IOException {
     Meter.Id id = meter.getId();
-    generator.writeObjectFieldStart(id.getName());
+    generator.writeStartObject();
     writeTags(generator, id.getTags());
     writeDescription(generator, id.getDescription());
     writeBaseUnit(generator, id.getBaseUnit());

@@ -51,11 +51,33 @@ class JsonScrapeTargetTest {
 
     counter.increment();
 
-    JsonNode node = write(registry).get("sample");
+    JsonNode node = write(registry).get("sample").get(0);
     assertThat(node.get("tags").get(0).get("key").asText()).isEqualTo("value");
     assertThat(node.get("description").asText()).isEqualTo("Sample counter");
     assertThat(node.get("baseUnit").asText()).isEqualTo("c");
     assertThat(node.get("count").asDouble()).isEqualTo(1.0);
+  }
+
+  @Test
+  void shouldReturnJsonForMetricsWithDifferentTags() throws IOException {
+    SimpleMeterRegistry registry = new SimpleMeterRegistry();
+
+    registry.counter("sample", "id", "1").increment();
+    registry.counter("sample", "id", "2").increment();
+    registry.counter("sample", "id", "2").increment();
+
+    JsonNode meters = write(registry).get("sample");
+    assertThat(meters.size()).isEqualTo(2);
+    for (int i=0; i<meters.size(); i++) {
+      JsonNode node = meters.get(i);
+      String id = node.get("tags").get(0).get("id").asText();
+      if ("1".equals(id)) {
+        assertThat(node.get("count").asDouble()).isEqualTo(1.0);
+      } else {
+        assertThat(node.get("tags").get(0).get("id").asText()).isEqualTo("2");
+        assertThat(node.get("count").asDouble()).isEqualTo(2.0);
+      }
+    }
   }
 
   @Test
@@ -64,7 +86,7 @@ class JsonScrapeTargetTest {
 
     Counter.builder("sample").register(registry);
 
-    JsonNode node = write(registry).get("sample");
+    JsonNode node = write(registry).get("sample").get(0);
     assertThat(node.has("tags")).isFalse();
     assertThat(node.has("description")).isFalse();
     assertThat(node.has("baseUnit")).isFalse();

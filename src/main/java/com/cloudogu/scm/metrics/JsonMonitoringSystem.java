@@ -22,7 +22,7 @@ import sonia.scm.metrics.MonitoringSystem;
 import sonia.scm.metrics.ScrapeTarget;
 import sonia.scm.plugin.Extension;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import java.util.Optional;
 
 @Extension
